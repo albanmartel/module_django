@@ -64,3 +64,11 @@ Le fichier **.env** doit être enregister à la base du projet
 ```bash
 pip install Django==5.2.18
 ```
+
+#### 4. Mémoriser les dépendances dans un fichier requirements.txt
+
+```bash
+pip freeze > requirements.txt
+```
+
+Désormais, le fichier de dépendances 'requirements.txt' permet d'installer les dépendances d'un projet django.
