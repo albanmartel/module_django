@@ -190,5 +190,145 @@ urlpatterns = [
 ]**
 ```
 
+## Ecriture de votre première application Django partie 2
 
 
+### Changement des variables existantes : 
+
+_LANGUAGE_CODE_ et _TIME_ZONE_
+
+1. Valeurs d'origine
+
+```bash
+LANGUAGE_CODE = 'en-us'
+
+TIME_ZONE = 'UTC'
+```
+
+2. Valeurs après  modification
+
+```bash
+LANGUAGE_CODE = 'fr-FR'
+
+TIME_ZONE = 'Europe/Paris'
+```
+
+### Accès à la BDD
+
+Par défaut ma base de données locale est vide , même si elle existe.
+
+Pour mettre ma base de données au niveau de ce qui est attendu par django, j'exécute la commande suivante :
+
+```bash
+python manage.py migrate
+```
+
+En me rendant dans l'outil dbbrowser, je me rends bien compte que suite à sa base s'est en partie peuplée.
+
+### Accéder au shell de django
+
+la commande permet d'accéder au shell de Django:
+
+```bash
+python manage.py shell
+```
+
+```bash
+djangotutorial> python manage.py shell
+6 objects imported automatically (use -v 2 for details).
+
+Python 3.14.6 (tags/v3.14.6:c63aec6, Jun 10 2026, 10:26:10) [MSC v.1944 64 bit (AMD64)] on win32
+Type "help", "copyright", "credits" or "license" for more information.
+(InteractiveConsole)
+>>>
+```
+
+### Création de 2 modèles : _Question et Choice_
+
+### 1.  Avant modification contenu du fichier _polls/models.py_
+
+```bash
+djangotutorial (main)
+$ cat polls/models.py
+from django.db import models
+
+# Create your models here.
+```
+
+### 2. Après modification contenu du fichier _polls/models.py_
+
+```bash
+djangotutorial (main)
+$ cat polls/models.py
+from django.db import models
+
+
+class Question(models.Model):
+    question_text = models.CharField(max_length=200)
+    pub_date = models.DateTimeField("date published")
+
+
+class Choice(models.Model):
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    choice_text = models.CharField(max_length=200)
+    votes = models.IntegerField(default=0)
+```
+
+### Activation des modèles
+
+
+#### Avant modification
+
+```bash
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+]
+```
+
+#### Après modification
+
+```bash
+INSTALLED_APPS = [
+    
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+]
+```
+
+### Actualiser les changements dans la base de données
+
+```bash
+python manage.py makemigrations polls
+```
+
+Cette commande ne créé pas la table polls dans la base de données
+
+par contre la suivante permet de la faire
+
+```bash
+python manage.py sqlmigrate polls 0001
+```
+
+### Créer un utilisateur privilégié
+
+```bash
+djangotutorial> python manage.py createsuperuser
+Username (leave blank to use 'martela'): alban
+Email address: alban.f.j.martel@laposte.net
+Password:
+Password (again):
+Error: Your passwords didn't match.
+Password:
+Password (again):
+Superuser created successfully.
+(.venv) PS djangotutorial>
+```
