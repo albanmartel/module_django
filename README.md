@@ -72,3 +72,11 @@ pip freeze > requirements.txt
 ```
 
 Désormais, le fichier de dépendances 'requirements.txt' permet d'installer les dépendances d'un projet django.
+
+#### 5. Installer Django à partir du fichier de dépendances
+
+il est nécessaire au préalable d'avoir installer l'environnement virtuel et de l'avoir activé.
+
+```bash
+python -m pip install -r requirements.txt
+```
