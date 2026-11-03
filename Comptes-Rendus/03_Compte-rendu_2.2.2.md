@@ -113,3 +113,60 @@ Regarder la TV à la maison
 
 >>>
 ```
+
+## 5. Affichez le nombre de choix enregistrés pour chaque question.
+
+```python
+>>> i = 1
+>>> for question in Question.objects.all():
+...     print(f"Pour la question n°{i}, il y a {question.choice_set.count()} choix.")
+...     i += 1
+...
+Pour la question n°1, il y a 5 choix.
+Pour la question n°2, il y a 3 choix.
+Pour la question n°3, il y a 4 choix.
+Pour la question n°4, il y a 4 choix.
+Pour la question n°5, il y a 5 choix.
+>>>
+```
+
+## 7. Triez les questions par ordre antéchronologique.
+
+```python
+>>> print("Triez les questions par ordre antéchronologique.")
+Triez les questions par ordre antéchronologique.
+>>> for question in Question.objects.order_by("-pub_date"):
+...     print(f"Question: \"{question.question_text}\" publié le: \"{question.pub_date.year}-{question.pub_date.month}-{question.pub_date.day}\"")
+...
+Question: "La publication des sondages dans la presse influence t-elle notre opinion ?" publié le: "2026-11-3"
+Question: "Faut-il relancer des voyages spatiaux sur la  lune" publié le: "2026-11-2"
+Question: "Qu'y a-t-il de nouveau aujourd'hui ?" publié le: "2026-10-30"
+Question: "Quel type de sortie préférez-vous ?" publié le: "2026-10-27"
+Question: "Quel est votre moment préféré de la journée ?" publié le: "2026-10-26"
+>>>
+```
+
+## 9. Créez une question en utilisant le shell
+
+```python
+print("Créez une question en utilisant le shell.")
+>>> print("la méthode vient de https://docs.djangoproject.com/fr/5.2/intro/tutorial02/")
+la méthode vient de https://docs.djangoproject.com/fr/5.2/intro/tutorial02/
+>>> question = Question(question_text="Aimez-vous le chocolat ?", pub_date=timezone.now())
+>>> print("Afficher l'id de la question")
+Afficher l'id de la question
+>>> print(question.id)
+None
+>>> print("Sauvegarder la question dans la base de données SQLite")
+Sauvegarder la question dans la base de données SQLite
+>>> question.save()
+>>> choix = Choice(choice_text="Je déteste ça",question_id=question.id)
+>>> choix.save()
+>>> choix = Choice(choice_text="Le chocolat, c'est une passion !",question_id=question.id)
+>>> choix.save()
+>>> choix = Choice(choice_text="Je n'aime que le chocolat au lait",question_id=question.id)
+>>> choix.save()
+>>> choix = Choice(choice_text="Le chocolat, je peux tout à fait m'en passer !",question_id=question.id)
+>>> choix.save()
+>>>
+```
