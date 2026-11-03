@@ -48,4 +48,22 @@ class QuestionAdmin(admin.ModelAdmin):
 
 Il n'est pas possible de se connecter avec ce nouveau compte.
 
-### 6. 
+### 6. Donner à l'utilisateur le droit de se connecter à l'interface d'admin
+
+Je coche la case Staff status pour donner à l'utilisateur "vincent" l'autorisation d'accéder à l'interface admin.
+Je donne à "vincent" les autorisations suivantes : 
+```txt
+Polls | Choice | Can view choice
+Polls | Question | Can view question
+Sessions | session | Can view session
+```
+
+L'utilisateur "vincent" peut se connecter mais il a des droits restreints.
+
+### 7. Déactiver l'utilisateur 
+
+Je décoche le compte vincent pour voir s'il est toujours actif.
+
+Après déconnection et reconnexion il est devenu impossible à "Vincent" de ce connecter. 
+
+
