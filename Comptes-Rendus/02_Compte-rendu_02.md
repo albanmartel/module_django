@@ -27,3 +27,25 @@ Non
 
 Non
 
+## 4. Ajout de fonctionnalités à l'interface d'administration.
+
+Le code suivant permet d'afficher en triant par date de la plus récente à la plus ancienne. Filtrer les résultats et recherché par du contenu de champs ont été ajoutés.
+
+```Python
+class QuestionAdmin(admin.ModelAdmin):
+    date_hierarchy = "pub_date"
+    # Trier de la plus récente à la plus anvienne
+    ordering = ["-pub_date"]
+    # Afficher les champs suivants de la liste
+    list_display = ("question_text", "pub_date", "id")
+    # Filtrer La liste des questions par les critères texte de la question, date de la question puis sont id
+    list_filter = ("question_text", "pub_date", "id")
+    # Chercher par champs
+    search_fields = ("question_text", "pub_date", "id")
+```
+
+### 5. Ajoutez un nouvel utilisateur via l'interface d'admin. 
+
+Il n'est pas possible de se connecter avec ce nouveau compte.
+
+### 6. 
