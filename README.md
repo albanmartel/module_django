@@ -80,3 +80,26 @@ il est nécessaire au préalable d'avoir installer l'environnement virtuel et de
 ```bash
 python -m pip install -r requirements.txt
 ```
+
+### Création du squelette de base du site
+
+```cmd
+mkdir djangotutorial
+django-admin startproject mysite djangotutorial
+cd djangotutorial
+```
+
+### Création de l'application __Polls__
+
+```cmd
+python manage.py startapp polls
+```
+
+_La suite du tutorial est ici :_  <https://docs.djangoproject.com/fr/5.2/intro/tutorial01/>
+
+
+### Démarrage du site de développement 
+
+```python
+python manage.py runserver
+```
