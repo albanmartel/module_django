@@ -32,15 +32,34 @@ def index(request):
 ### Les erreurs 404
 
 1. mise à jour du fichier _polls/views.py_
-2. Création d'un gabarit(template) _polls/detail.html_
+2. Création d'un gabarit(template) _polls/templates/polls/detail.html_
 
 #### Optimisation de la gestion d'exception avec : __get_object_or_404()__
 
-1. mise à jour du fichier _polls/views.py_ avec optimisation du code en utilisant un raccourci __get_object_or_404()__
+1. mise à jour du fichier _polls/templates/polls/views.py_ avec optimisation du code en utilisant un raccourci __get_object_or_404()__
 
 ### Utilisation du système de gabarits
 
+Les gabarits sont rangés dans : _polls/templates/polls_
+
+__boucle for dans une page html :__
+```html
+{% for choice in question.choice_set.all %}
+    <li>{{ choice.choice_text }}</li>
+{% endfor %}
+```
+
 ### Suppression des URL codés en dur dans les gabarits
 
+Remplacer les url en dur par url dynamique.
+
 ### Espaces de noms et noms d’URL
+
+code pour avoir un espace de nom:
+
+```html
+app_name = "polls"
+```
+
+
 
