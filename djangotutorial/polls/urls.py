@@ -15,5 +15,5 @@ urlpatterns = [
     # ex /polls/all
     path("all/", views.AllView.as_view(), name="all"),
     # ex /polls/1/frequency
-    path("<int:question_id>/frequency", views.AllView.as_view(), name="frequency"),
+    path("<int:pk>/frequency", views.FrequencyView.as_view(), name="frequency"),
 ]
