@@ -44,3 +44,11 @@ def vote(request, question_id):
         # with POST data. This prevents data from being posted twice if a
         # user hits the Back button.
         return HttpResponseRedirect(reverse("polls:results", args=(question.id,)))
+
+
+class AllView(IndexView):
+    template_name = "polls/all.html"
+
+    def get_queryset(self):
+        """Return all published questions."""
+        return Question.objects.order_by("-pub_date")
