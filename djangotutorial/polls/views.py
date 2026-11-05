@@ -1,4 +1,4 @@
-from django.db.models import F
+from django.db.models import F, Sum, Max
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
@@ -52,3 +52,13 @@ class AllView(IndexView):
     def get_queryset(self):
         """Return all published questions."""
         return Question.objects.order_by("-pub_date")
+
+class FrequencyView(generic.DetailView):
+    model = Question
+    template_name = "polls/frequency.html"
+    context_object_name = "question"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["frequencies"] = self.object.get_choices()
+        return context
