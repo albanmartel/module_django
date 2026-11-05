@@ -33,10 +33,9 @@ class Question(models.Model):
     def get_max_choice(self):
         choices = self.choice_set.all()
         resultat = self.choice_set.aggregate(total=Sum('votes'))
-        total = resultat['total']
+        total = resultat['total'] or 0
         max_choice = max(choices, key=lambda c: c.votes / total)
-        return (max_choice.choice_text, max_choice.votes / total)
-
+        return max_choice.choice_text, max_choice.votes / total if total > 0 else None
 
 
 class Choice(models.Model):
