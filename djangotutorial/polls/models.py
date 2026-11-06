@@ -25,18 +25,17 @@ class Question(models.Model):
         return timezone.now() - self.pub_date
 
     def get_choices(self):
-        choices = self.choice_set.all()
         resultat = self.choice_set.aggregate(total=Sum('votes'))
         total = resultat['total']
-        return [(c.choice_text, c.votes, c.votes / total) for c in choices]
+        return [(c.choice_text, c.votes, c.votes / total)
+                for c in self.choice_set.all()]
 
     def get_max_choice(self):
         choices = self.choice_set.all()
         resultat = self.choice_set.aggregate(total=Sum('votes'))
-        total = resultat['total'] or 0
+        total = resultat['total']
         max_choice = max(choices, key=lambda c: c.votes / total)
         return max_choice.choice_text, max_choice.votes / total if total > 0 else None
-
 
 class Choice(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
