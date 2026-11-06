@@ -37,6 +37,9 @@ class Question(models.Model):
         max_choice = max(choices, key=lambda c: c.votes / total)
         return max_choice.choice_text, max_choice.votes / total if total > 0 else None
 
+    def __repr__(self):
+        return "<Question: {}>".format(self.question_text)
+
 class Choice(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     choice_text = models.CharField(max_length=200)
