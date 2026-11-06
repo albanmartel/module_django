@@ -20,6 +20,7 @@ Django intègre un framework de test basé sur le module standard `unittest` de 
 
 * Les tests s'exécutent dans une **base de données de test temporaire** distincte de votre vraie base de données.
 * Pour lancer les tests, on utilise la commande :
+
 ```bash
 python manage.py test
 ```
@@ -56,4 +57,16 @@ Django fournit un **Client de test** (`self.client`) qui simule un navigateur we
 
 * **Abondance de biens ne nuit pas :** Écrivez autant de tests que nécessaire (pour le code normal, les cas limites, les erreurs, etc.). Plus vos tests sont précis, plus votre application est sûre.
 * **Amélioration continue :** Souvent, lorsqu'un bug est découvert, la meilleure pratique est d'écrire d'abord un test qui échoue à cause de ce bug, puis de modifier le code jusqu'à ce que le test passe.
+
+
+### 4.1.2 Correction du calcul de la date
+
+Le test met en évidence que la fonction est le plus récent ne fonctionne pas pour une date dans le futur.
+
+Pour corriger cela la méthode 'test_was_published_recently_with_future_question' a été corrigée : 
+
+La fonction a été corrigée pour que :
+- Seules les questions réellement publiées au cours des dernières 24 heures
+ (et dont la date est donc antérieure ou égale à l'instant présent) retournent True.
+ - Si une question vient du futur, la seconde condition échoue et la fonction retourne correctement
 
