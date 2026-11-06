@@ -3,9 +3,14 @@ from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
+from django.utils import timezone
 from django.views import generic
+from django.views.generic import TemplateView
+from .utils import minimax
 
 from .models import Choice, Question
+
+NB_MAX_CHOIX = 5
 
 class IndexView(generic.ListView):
     template_name = "polls/index.html"
@@ -13,7 +18,7 @@ class IndexView(generic.ListView):
 
     def get_queryset(self):
         """Return the last five published questions."""
-        return Question.objects.order_by("-pub_date")
+        return Question.objects.order_by("-pub_date")[:5]
 
 class DetailView(generic.DetailView):
     model = Question
@@ -62,3 +67,52 @@ class FrequencyView(generic.DetailView):
         context = super().get_context_data(**kwargs)
         context["frequencies"] = self.object.get_choices()
         return context
+
+
+def statistics(request):
+    nbr_sondages = Question.objects.count()
+    nbr_choix = Choice.objects.count()
+    nbr_votes = Choice.objects.aggregate(somme=Sum('votes'))['somme'] or 0
+    moyenne_par_sondage = nbr_votes / nbr_sondages if nbr_sondages > 0 else 0
+
+    question_la_moins_populaire, question_la_plus_populaire = minimax() if nbr_sondages > 0 else (None, None)
+
+    id_derniere_question = Question.objects.aggregate(max=Max('id'))['max']
+    derniere_question = Question.objects.get(pk=id_derniere_question) if id_derniere_question else None
+
+    return render(request, 'polls/statistics.html', {
+        'nbr_sondages': nbr_sondages,
+        'nbr_choix': nbr_choix,
+        'nbr_votes': nbr_votes,
+        'moyenne_par_sondage': moyenne_par_sondage,
+        'question_la_plus_populaire': question_la_plus_populaire,
+        'question_la_moins_populaire': question_la_moins_populaire,
+        'derniere_question': derniere_question,
+    })
+
+def add(request):
+    return render(request, 'polls/add.html', {
+        'liste_no_choix': range(NB_MAX_CHOIX)
+    })
+
+def confirm_add(request):
+    question_text = request.POST.get('question_text', '').strip()
+    if question_text:
+        question = Question(question_text=question_text, pub_date=timezone.now())
+        question.save()
+        for no_choix in range(NB_MAX_CHOIX):
+            nom_champ = 'choix_{}'.format(no_choix)
+            choice_text = request.POST.get(nom_champ, '').strip()
+            if choice_text:
+                choice = Choice(question=question, choice_text=choice_text)
+                choice.save()
+            else:
+                break
+        return render(request, 'polls/confirm_add.html')
+    else:
+        return render(request, 'polls/add.html', {
+            'error_message': "You didn't enter a question text",
+            'liste_no_choix': range(NB_MAX_CHOIX)
+        })
+
+
