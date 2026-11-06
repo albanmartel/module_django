@@ -17,7 +17,8 @@ urlpatterns = [
     # ex /polls/1/frequency
     path("<int:pk>/frequency", views.FrequencyView.as_view(), name="frequency"),
     # ex /polls/statistics
-    path("statistics/", views.StatisticsView.as_view(), name="all"),
+    # path("statistics/", views.StatisticsView.as_view(), name="all"),
+    path('statistics/', views.statistics, name='statistics'),
     path('add/', views.add, name='add'),
     path('confirm_add/', views.confirm_add, name='confirm_add'),
 ]
