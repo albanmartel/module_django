@@ -1,0 +1,12 @@
+<h1>Statistiques</h1>
+<p>Nombre de sondages : {{ nbr_sondages }}</p>
+<p>Nombre de choix : {{ nbr_choix }}</p>
+<p>Nombre de votes : {{ nbr_votes }}</p>
+<p>Moyenne par sondage : {{ moyenne_par_sondage }}</p>
+<p>Question la plus populaire : {{ question_la_plus_populaire }}</p>
+<p>Question la moins populaire : {{ question_la_moins_populaire }}</p>
+<p>Dernière question : {{ derniere_question }}</p>
+<p><a href="{% url 'polls:index' %}">index</a></p>
+
+<br>
+<a href="{% url 'polls:index' %}">← Retour à l'accueil</a>
