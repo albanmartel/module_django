@@ -6,8 +6,11 @@ from django.urls import reverse
 from django.utils import timezone
 from django.views import generic
 from django.views.generic import TemplateView
-from .utils import minimax
+from django.core.mail import send_mail
 
+
+from .utils import minimax
+from .forms import NameForm
 from .models import Choice, Question
 
 NB_MAX_CHOIX = 5
@@ -115,4 +118,23 @@ def confirm_add(request):
             'liste_no_choix': range(NB_MAX_CHOIX)
         })
 
+def get_name(request):
+  # Si c'est un POST, on passe les données. Si c'est un GET, request.POST est vide donc vaut None (formulaire vide)
+  form = NameForm(request.POST or None)
+
+  # Si la méthode est POST et que le formulaire est valide
+  if request.method == "POST" and form.is_valid():
+    name = form.cleaned_data["your_name"]
+    request.session["submitted_name"] = name
+    return HttpResponseRedirect("/polls/thanks/")
+
+  # Dans tous les autres cas (GET initial ou POST invalide), on affiche le formulaire
+  return render(request, "polls/name.html", {"form": form})
+
+
+def thanks_view(request):
+    # On récupère le nom depuis la session (avec une valeur par défaut si vide)
+    name = request.session.get("submitted_name", "invité")
+
+    return render(request, "polls/thanks.html", {"name": name})
 
