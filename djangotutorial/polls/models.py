@@ -1,8 +1,10 @@
 import datetime
 
+from django.contrib import admin
 from django.db import models
 from django.utils import timezone
 from django.db.models import Sum
+from django.contrib import admin
 
 MAX_LENGTH = 20
 
@@ -17,7 +19,12 @@ class Question(models.Model):
 
     def __str__(self):
         return "{} {}".format(self.pub_date, text_excerpt(self.question_text, MAX_LENGTH))
-    
+
+    @admin.display(
+        boolean=True,
+        ordering="pub_date",
+        description="Published recently?",
+    )
     def was_published_recently(self):
         """
         Returns whether or not the question is published recently.
