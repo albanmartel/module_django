@@ -1,5 +1,5 @@
 from debug_toolbar.toolbar import debug_toolbar_urls
-from django.urls import path
+from django.urls import path, include
 
 from . import views
 
@@ -22,4 +22,4 @@ urlpatterns = [
     path('statistics/', views.statistics, name='statistics'),
     path('add/', views.add, name='add'),
     path('confirm_add/', views.confirm_add, name='confirm_add'),
-] + debug_toolbar_urls()
+]
