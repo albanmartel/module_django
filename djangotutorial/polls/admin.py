@@ -15,6 +15,11 @@ class QuestionAdmin(admin.ModelAdmin):
     search_fields = ("question_text", "pub_date", "id")
     # fitrer les listes de question par date de modification
     list_filter = ["pub_date"]
+    # Partager le formulaire d'administration des questions de sondages en plusieurs petits sous-ensembles.
+    fieldsets = [
+        (None, {"fields": ["question_text"]}),
+        ("Date information", {"fields": ["pub_date"]}),
+    ]
 
 class ChoiceInline(admin.StackedInline):
     model = Choice
