@@ -13,7 +13,20 @@ class QuestionAdmin(admin.ModelAdmin):
     list_filter = ("question_text", "pub_date", "id")
     # Chercher par champs
     search_fields = ("question_text", "pub_date", "id")
+    # fitrer les listes de question par date de modification
+    list_filter = ["pub_date"]
 
+class ChoiceInline(admin.StackedInline):
+    model = Choice
+    extra = 3
+
+
+class QuestionAdmin(admin.ModelAdmin):
+    fieldsets = [
+        (None, {"fields": ["question_text"]}),
+        ("Date information", {"fields": ["pub_date"], "classes": ["collapse"]}),
+    ]
+    inlines = [ChoiceInline]
 
 admin.site.register(Question, QuestionAdmin)
 admin.site.register(Choice)
