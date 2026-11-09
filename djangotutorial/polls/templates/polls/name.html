@@ -1,0 +1,9 @@
+<form action="/polls/contact/" method="post">
+    <!-- Jeton de sécurité obligatoire pour les requêtes POST en Django -->
+    {% csrf_token %}
+
+    <!-- Affiche les champs du formulaire générés automatiquement -->
+    {{ form }}
+
+    <input type="submit" value="Envoyer">
+</form>
