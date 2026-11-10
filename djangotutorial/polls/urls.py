@@ -21,7 +21,6 @@ urlpatterns = [
     # path("statistics/", views.StatisticsView.as_view(), name="all"),
     path('statistics/', views.statistics, name='statistics'),
     path('add/', views.add, name='add'),
-    path('confirm_add/', views.confirm_add, name='confirm_add'),
     # ex /polls/contacts
     path('contact/', views.get_name, name='get_name'),
     # ex /polls/thanks
