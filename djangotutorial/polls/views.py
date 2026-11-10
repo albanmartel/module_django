@@ -10,7 +10,7 @@ from django.core.mail import send_mail
 
 
 from .utils import minimax
-from .forms import NameForm
+from .forms import NameForm, QuestionAddForm
 from .models import Choice, Question
 
 NB_MAX_CHOIX = 5
@@ -94,29 +94,31 @@ def statistics(request):
     })
 
 def add(request):
-    return render(request, 'polls/add.html', {
-        'liste_no_choix': range(NB_MAX_CHOIX)
-    })
+        if request.method == 'POST':
+            form = QuestionAddForm(request.POST)
+            if form.is_valid():
+                question = \
+                    Question(question_text= \
+                                 form.cleaned_data['question_text'],
+                             pub_date=timezone.now())
+                question.save()
+                # on traite à présent les champs de choix remplis
+                # (on s'arrête au premier vide)
+                for no_choix in range(NB_MAX_CHOIX):
+                    nom_champ = 'choice_{}'.format(no_choix)
+                    choice_text = form.cleaned_data[nom_champ].strip()
+                    if choice_text:
+                        choice = Choice(question=question,
+                                        choice_text=choice_text)
+                        choice.save()
+                    else:
+                        break
+                return render(request, 'polls/confirm_add.html')
+        else:
+            form = QuestionAddForm()
 
-def confirm_add(request):
-    question_text = request.POST.get('question_text', '').strip()
-    if question_text:
-        question = Question(question_text=question_text, pub_date=timezone.now())
-        question.save()
-        for no_choix in range(NB_MAX_CHOIX):
-            nom_champ = 'choix_{}'.format(no_choix)
-            choice_text = request.POST.get(nom_champ, '').strip()
-            if choice_text:
-                choice = Choice(question=question, choice_text=choice_text)
-                choice.save()
-            else:
-                break
-        return render(request, 'polls/confirm_add.html')
-    else:
-        return render(request, 'polls/add.html', {
-            'error_message': "You didn't enter a question text",
-            'liste_no_choix': range(NB_MAX_CHOIX)
-        })
+        return render(request, 'polls/add.html', {'form': form})
+
 
 def get_name(request):
   # Si c'est un POST, on passe les données. Si c'est un GET, request.POST est vide donc vaut None (formulaire vide)
@@ -137,4 +139,3 @@ def thanks_view(request):
     name = request.session.get("submitted_name", "invité")
 
     return render(request, "polls/thanks.html", {"name": name})
-
