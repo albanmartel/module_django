@@ -23,6 +23,14 @@ class IndexView(generic.ListView):
         """Return the last five published questions."""
         return Question.objects.order_by("-pub_date")[:5]
 
+    def get_context_data(self, **kwargs):
+        # récupération du contexte qui contient  "latest_question_list"
+        context = super().get_context_data(**kwargs)
+        # Ajout d'une variable pour le titre
+        context["title"] = "Application de sondages"
+
+        return context
+
 class DetailView(generic.DetailView):
     model = Question
     template_name = "polls/detail.html"
