@@ -1,6 +1,8 @@
 from django import forms
 from .models import Question, Choice
 
+NB_MAX_CHOIX = 5
+
 class NameForm(forms.Form):
     your_name = forms.CharField(label="Your name", max_length=100)
 
@@ -12,9 +14,14 @@ class ContactForm(forms.Form):
 
 class QuestionAddForm(forms.Form):
     question_text = forms.CharField(label='Question text')
-    choice_0 = forms.CharField(label='choice #1')
-    choice_1 = forms.CharField(label='choice #2', required=False)
-    choice_2 = forms.CharField(label='choice #3', required=False)
-    choice_3 = forms.CharField(label='choice #4', required=False)
-    choice_4 = forms.CharField(label='choice #5', required=False)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for i in range(NB_MAX_CHOIX):
+            self.fields[f"choix_{i}"] = forms.CharField(
+                label=f"Choice #{i + 1}",
+                max_length=200,
+                required=False
+            )
 
