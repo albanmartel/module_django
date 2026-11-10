@@ -7,7 +7,9 @@
     <title>{% block title %}Django Site Title Page {% endblock %}</title>
 </head>
 <body>
-    <header>{% block header}-Header-{% endblock %}</header>
-    <main>{% block main}-Main-{% endblock %}</main>
+    <h1>{% block maintitle %}Django Site Title Page {% endblock %}</h1>
+    <header>{% block header %}-Header-{% endblock %}</header>
+    <main>{% block main %}-Main-{% endblock %}</main>
+   <footer>{% block footer %}-Footer-{% endblock %}</footer>
 </body>
 </html>
