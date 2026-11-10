@@ -1,6 +1,12 @@
-{% load static %}
+{% extends "base.html" %}
 
-<link rel="stylesheet" href="{% static 'polls/style.css' %}">
+{% block title %}{{ title }}{% endblock %}
+
+{% block maintitle %} {{ title }} {% endblock %}
+
+{% block header %} {% endblock %}
+
+{% block main %}
 
 {% if latest_question_list %}
     <ul>
@@ -12,6 +18,10 @@
     <p>No polls are available.</p>
 {% endif %}
 
+{% endblock %}
+
+{% block footer %}
 <p><a href="{% url 'polls:add' %}">Add a question</a></p>
 <p><a href="{% url 'polls:statistics' %}">Statistiques des sondages</a></p>
 <a href="{% url 'polls:all' %}">Liste détaillée des questions </a>
+{% endblock %}
