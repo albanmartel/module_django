@@ -1,4 +1,13 @@
-<h1>Add a question</h1>
+{% extends "base.html" %}
+
+{% block title %}{{ request.session.title}}{% endblock %}
+
+{% block maintitle %} {{ request.session.title }} {% endblock %}
+
+{% block header %} {% endblock %}
+
+{% block main %}
+
 {% if error_message %}
     <p><strong>{{ error_message }}</strong></p>
 {% endif %}
@@ -7,3 +16,11 @@
     {{ form.as_p }}
     <input type="submit" value="Add">
 </form>
+
+{% endblock %}
+
+{% block footer %}
+<p><a href="{% url 'polls:add' %}">Add a question</a></p>
+<p><a href="{% url 'polls:statistics' %}">Statistiques des sondages</a></p>
+<a href="{% url 'polls:all' %}">Liste détaillée des questions </a>
+{% endblock %}
