@@ -4,20 +4,10 @@
     <meta charset="UTF-8">
     {% load static %}
     <link rel="stylesheet" href="{% static 'style.css' %}">
-    <title>{% block title %}My amazing site{% endblock %}</title>
+    <title>{% block title %}Django Site Title Page {% endblock %}</title>
 </head>
 <body>
-    <div id="sidebar">
-        {% block sidebar %}
-        <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/blog/">Blog</a></li>
-        </ul>
-        {% endblock %}
-    </div>
-
-    <div id="content">
-        {% block content %}{% endblock %}
-    </div>
+    <header>{% block header}-Header-{% endblock %}</header>
+    <main>{% block main}-Main-{% endblock %}</main>
 </body>
 </html>
