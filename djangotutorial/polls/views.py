@@ -8,12 +8,12 @@ from django.views import generic
 from django.views.generic import TemplateView
 from django.core.mail import send_mail
 
-
 from .utils import minimax
 from .forms import NameForm, QuestionAddForm
 from .models import Choice, Question
 
 NB_MAX_CHOIX = 5
+
 
 class IndexView(generic.ListView):
     template_name = "polls/index.html"
@@ -31,13 +31,16 @@ class IndexView(generic.ListView):
 
         return context
 
+
 class DetailView(generic.DetailView):
     model = Question
     template_name = "polls/detail.html"
 
+
 class ResultsView(generic.DetailView):
     model = Question
     template_name = "polls/results.html"
+
 
 def vote(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
@@ -68,6 +71,7 @@ class AllView(IndexView):
     def get_queryset(self):
         """Return all published questions."""
         return Question.objects.order_by("-pub_date")
+
 
 class FrequencyView(generic.DetailView):
     model = Question
@@ -101,45 +105,47 @@ def statistics(request):
         'derniere_question': derniere_question,
     })
 
-def add(request):
-        if request.method == 'POST':
-            form = QuestionAddForm(request.POST)
-            if form.is_valid():
-                question = \
-                    Question(question_text= \
-                                 form.cleaned_data['question_text'],
-                             pub_date=timezone.now())
-                question.save()
-                # on traite à présent les champs de choix remplis
-                # (on s'arrête au premier vide)
-                for no_choix in range(NB_MAX_CHOIX):
-                    nom_champ = 'choice_{}'.format(no_choix)
-                    choice_text = form.cleaned_data[nom_champ].strip()
-                    if choice_text:
-                        choice = Choice(question=question,
-                                        choice_text=choice_text)
-                        choice.save()
-                    else:
-                        break
-                return render(request, 'polls/confirm_add.html')
-        else:
-            form = QuestionAddForm()
 
-        return render(request, 'polls/add.html', {'form': form})
+def add(request):
+    request.session["title"] = "Add a question"
+    if request.method == 'POST':
+        form = QuestionAddForm(request.POST)
+        if form.is_valid():
+            question = \
+                Question(question_text= \
+                             form.cleaned_data['question_text'],
+                         pub_date=timezone.now())
+            question.save()
+            # on traite à présent les champs de choix remplis
+            # (on s'arrête au premier vide)
+            for no_choix in range(NB_MAX_CHOIX):
+                nom_champ = 'choice_{}'.format(no_choix)
+                choice_text = form.cleaned_data[nom_champ].strip()
+                if choice_text:
+                    choice = Choice(question=question,
+                                    choice_text=choice_text)
+                    choice.save()
+                else:
+                    break
+            return render(request, 'polls/confirm_add.html')
+    else:
+        form = QuestionAddForm()
+
+    return render(request, 'polls/add.html', {'form': form})
 
 
 def get_name(request):
-  # Si c'est un POST, on passe les données. Si c'est un GET, request.POST est vide donc vaut None (formulaire vide)
-  form = NameForm(request.POST or None)
+    # Si c'est un POST, on passe les données. Si c'est un GET, request.POST est vide donc vaut None (formulaire vide)
+    form = NameForm(request.POST or None)
 
-  # Si la méthode est POST et que le formulaire est valide
-  if request.method == "POST" and form.is_valid():
-    name = form.cleaned_data["your_name"]
-    request.session["submitted_name"] = name
-    return HttpResponseRedirect("/polls/thanks/")
+    # Si la méthode est POST et que le formulaire est valide
+    if request.method == "POST" and form.is_valid():
+        name = form.cleaned_data["your_name"]
+        request.session["submitted_name"] = name
+        return HttpResponseRedirect("/polls/thanks/")
 
-  # Dans tous les autres cas (GET initial ou POST invalide), on affiche le formulaire
-  return render(request, "polls/name.html", {"form": form})
+    # Dans tous les autres cas (GET initial ou POST invalide), on affiche le formulaire
+    return render(request, "polls/name.html", {"form": form})
 
 
 def thanks_view(request):
