@@ -19,7 +19,7 @@ class QuestionAddForm(forms.Form):
         super().__init__(*args, **kwargs)
 
         for i in range(NB_MAX_CHOIX):
-            self.fields[f"choix_{i}"] = forms.CharField(
+            self.fields[f"choice_{i}"] = forms.CharField(
                 label=f"Choice #{i + 1}",
                 max_length=200,
                 required=False
