@@ -41,7 +41,7 @@ class DetailView(generic.DetailView):
         context = super().get_context_data(**kwargs)
 
         # 2. Ajouter votre variable de titre personnalisée
-        context['title'] = "Votez pour la question"
+        context['title'] = "Vote for a question"
 
         # (Optionnel) Si vous voulez aussi passer le formulaire initialisé dans la DetailView en GET
         # choices_form = [(choice.id, choice.choice_text) for choice in self.object.choice_set.all()]
@@ -120,7 +120,15 @@ def statistics(request):
 
 
 def add(request):
-    request.session["title"] = "Add a question"
+
+    def get_context_data(self, **kwargs):
+        # 1. Récupérer le contexte existant (qui contient déjà 'question')
+        context = super().get_context_data(**kwargs)
+
+        # 2. Ajouter votre variable de titre personnalisée
+        context['title'] = "Add a question"
+
+
     if request.method == 'POST':
         form = QuestionAddForm(request.POST)
         if form.is_valid():
@@ -144,7 +152,13 @@ def add(request):
     else:
         form = QuestionAddForm()
 
-    return render(request, 'polls/add.html', {'form': form})
+    # Définition du contexte avec le formulaire ET le titre
+    context = {
+        'form': form,
+        'title': "Add a question",  # <-- Votre variable accessible via {{ title }} dans le HTML
+    }
+
+    return render(request, 'polls/add.html', context)
 
 
 def get_name(request):
