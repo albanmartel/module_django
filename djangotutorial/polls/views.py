@@ -127,7 +127,7 @@ def add(request):
                     choice.save()
                 else:
                     break
-            return render(request, 'polls/confirm_add.html')
+            return HttpResponseRedirect(reverse("polls:index"))
     else:
         form = QuestionAddForm()
 
