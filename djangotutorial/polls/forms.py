@@ -1,4 +1,6 @@
 from django import forms
+from django.contrib.auth.views import LoginView
+from django.contrib.auth.forms import AuthenticationForm
 from .models import Question, Choice
 
 NB_MAX_CHOIX = 5
@@ -37,3 +39,13 @@ class VoteForm(forms.Form):
             forms.ChoiceField(label=question_text,
                               widget=forms.RadioSelect,
                               choices=choices)
+
+class AuthenticateView(LoginView):
+    template_name = "polls/authenticate.html"
+
+    def get_context_data(self, **kwargs):
+        # On récupère le contexte de base (qui contient déjà le formulaire de connexion prêt à l'emploi)
+        context = super().get_context_data(**kwargs)
+        # On ajoute juste votre titre personnalisé
+        context['title'] = "Log in"
+        return context
