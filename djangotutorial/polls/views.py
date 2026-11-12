@@ -2,6 +2,8 @@ from django.db.models import F, Sum, Max
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
+from django.contrib.auth.views import LoginView
+from django.contrib.auth.forms import AuthenticationForm
 from django.urls import reverse
 from django.utils import timezone
 from django.views import generic
@@ -10,7 +12,9 @@ from django.core.mail import send_mail
 
 from .utils import minimax
 from .forms import NameForm, QuestionAddForm, VoteForm
-from .models import Choice, Question
+from .models import Choice, Question, CustomUser
+
+
 
 NB_MAX_CHOIX = 5
 
@@ -121,14 +125,6 @@ def statistics(request):
 
 def add(request):
 
-    def get_context_data(self, **kwargs):
-        # 1. Récupérer le contexte existant (qui contient déjà 'question')
-        context = super().get_context_data(**kwargs)
-
-        # 2. Ajouter votre variable de titre personnalisée
-        context['title'] = "Add a question"
-
-
     if request.method == 'POST':
         form = QuestionAddForm(request.POST)
         if form.is_valid():
@@ -180,3 +176,12 @@ def thanks_view(request):
     name = request.session.get("submitted_name", "invité")
 
     return render(request, "polls/thanks.html", {"name": name})
+
+
+class AuthenticateView(LoginView):
+    template_name = "polls/authenticate.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = "Log in"
+        return context
