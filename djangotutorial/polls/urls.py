@@ -25,5 +25,7 @@ urlpatterns = [
     path('contact/', views.get_name, name='get_name'),
     # ex /polls/thanks
     path("thanks/", views.thanks_view, name="thanks"),
+    # ex /polls/authenticate
+    path("authenticate/", views.AuthenticateView.as_view(), name="authenticate"),
 
 ]
