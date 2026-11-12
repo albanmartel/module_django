@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block maintitle %} {{ title }} {% endblock %}
+
+{% block header %} {% endblock %}
+
+{% block main %}
+
+{% if error_message %}
+    <p><strong>{{ error_message }}</strong></p>
+{% endif %}
+
+<!-- Affichage des erreurs de connexion si le formulaire est invalide -->
+    {% if form.errors %}
+        <p style="color: red;">Nom d'utilisateur ou mot de passe incorrect.</p>
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Se connecter</button>
+    </form>
+
+<br>
+    <!-- Lien pour accéder au site en simple visiteur -->
+    <p>Vous ne souhaitez pas vous connecter ? <a href="{% url 'polls:index' %}">Continuer en simple visiteur</a></p>
+</body>
+
+{% endblock %}
+
+{% block footer %}
+<p><a href="{% url 'polls:add' %}">Add a question</a></p>
+<p><a href="{% url 'polls:statistics' %}">Statistiques des sondages</a></p>
+<a href="{% url 'polls:all' %}">Liste détaillée des questions </a>
+{% endblock %}
