@@ -9,7 +9,7 @@ from django.views.generic import TemplateView
 from django.core.mail import send_mail
 
 from .utils import minimax
-from .forms import NameForm, QuestionAddForm
+from .forms import NameForm, QuestionAddForm, VoteForm
 from .models import Choice, Question
 
 NB_MAX_CHOIX = 5
@@ -36,33 +36,46 @@ class DetailView(generic.DetailView):
     model = Question
     template_name = "polls/detail.html"
 
+    def get_context_data(self, **kwargs):
+        # 1. Récupérer le contexte existant (qui contient déjà 'question')
+        context = super().get_context_data(**kwargs)
+
+        # 2. Ajouter votre variable de titre personnalisée
+        context['title'] = "Votez pour la question"
+
+        # (Optionnel) Si vous voulez aussi passer le formulaire initialisé dans la DetailView en GET
+        # choices_form = [(choice.id, choice.choice_text) for choice in self.object.choice_set.all()]
+        # context['form'] = VoteForm(self.object.question_text, choices_form)
+
+        return context
+
+    def vote(request, question_id):
+        question = get_object_or_404(Question, pk=question_id)
+
+        choices_form = [(choice.id, choice.choice_text)
+                        for choice in question.choice_set.all()]
+        if request.method == 'POST':
+            form = VoteForm(question.question_text, choices_form, request.POST)
+            if form.is_valid():
+                selected_choice = question.choice_set.get(pk=form.cleaned_data['choice'])
+                selected_choice.votes += 1
+                selected_choice.save()
+                return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
+            return None
+        else:
+            form = VoteForm(question.question_text, choices_form)
+            # En cas d'erreur de formulaire,
+            # le template en incluant aussi le titre pour garder la cohérence
+            return render(request, 'polls/detail.html', {
+                'form': form,
+                'question': question,
+                'title': f"Sondage : {question.question_text}"
+            })
+
 
 class ResultsView(generic.DetailView):
     model = Question
     template_name = "polls/results.html"
-
-
-def vote(request, question_id):
-    question = get_object_or_404(Question, pk=question_id)
-    try:
-        selected_choice = question.choice_set.get(pk=request.POST["choice"])
-    except (KeyError, Choice.DoesNotExist):
-        # Redisplay the question voting form.
-        return render(
-            request,
-            "polls/detail.html",
-            {
-                "question": question,
-                "error_message": "You didn't select a choice.",
-            },
-        )
-    else:
-        selected_choice.votes = F("votes") + 1
-        selected_choice.save()
-        # Always return an HttpResponseRedirect after successfully dealing
-        # with POST data. This prevents data from being posted twice if a
-        # user hits the Back button.
-        return HttpResponseRedirect(reverse("polls:results", args=(question.id,)))
 
 
 class AllView(IndexView):
