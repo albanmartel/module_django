@@ -1,3 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block maintitle %} {{ title }} {% endblock %}
+
+{% block header %} {% endblock %}
+
+{% block main %}
+
+{% if error_message %}
+    <p><strong>{{ error_message }}</strong></p>
+{% endif %}
 <form action="{% url 'polls:vote' question.id %}" method="post">
 {% csrf_token %}
 <fieldset>
@@ -10,3 +23,11 @@
 </fieldset>
 <input type="submit" value="Vote">
 </form>
+
+{% endblock %}
+
+{% block footer %}
+<p><a href="{% url 'polls:add' %}">Add a question</a></p>
+<p><a href="{% url 'polls:statistics' %}">Statistiques des sondages</a></p>
+<a href="{% url 'polls:all' %}">Liste détaillée des questions </a>
+{% endblock %}
