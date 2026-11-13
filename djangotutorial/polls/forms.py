@@ -1,10 +1,15 @@
 from django import forms
+from django.forms import ModelForm, Textarea, formset_factory
+from django.contrib.auth import get_user_model
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.forms import AuthenticationForm
 from .models import Question, Choice
+from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
+from django.contrib.auth.models import User
 
 NB_MAX_CHOIX = 5
 
+User = get_user_model()
 
 class NameForm(forms.Form):
     your_name = forms.CharField(label="Your name", max_length=100)
@@ -49,3 +54,42 @@ class AuthenticateView(LoginView):
         # On ajoute juste votre titre personnalisé
         context['title'] = "Log in"
         return context
+
+class QuestionForm(ModelForm):
+    template_name = "polls/form.html"
+
+    class Meta:
+        model = Question
+        fields = ["question_text"]
+        widgets = {
+            "question_text": Textarea(attrs={"cols": 80, "rows": 3}),
+        }
+        help_texts = {
+            "question_text": "Intitulé de la question"
+        }
+
+class ChoiceForm(ModelForm):
+    template_name = "polls/form.html"
+
+    class Meta:
+        model = Choice
+        fields = ["choice_text"]
+        widgets = {
+            "choice_text": Textarea(attrs={"cols": 80, "rows": 2}),
+        }
+
+
+ChoiceFormSet = formset_factory(
+    ChoiceForm,
+    extra=5,
+    max_num=5,
+    validate_max=True
+)
+
+class InscriptionForm(UserCreationForm):
+    class Meta(UserCreationForm.Meta):
+        model = User
+        fields = ["email", "first_name", "last_name"]
+
+class PasswordForm(PasswordChangeForm):
+    pass
