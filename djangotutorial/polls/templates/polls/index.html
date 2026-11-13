@@ -4,9 +4,11 @@
 
 {% block maintitle %} {{ title }} {% endblock %}
 
-{% block header %} {% endblock %}
-
 {% block main %}
+
+{% if error_message %}
+    <p><strong>{{ error_message }}</strong></p>
+{% endif %}
 
 {% if latest_question_list %}
     <ul>
