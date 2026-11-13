@@ -1,4 +1,17 @@
-<h1>Statistiques</h1>
+{% extends "base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block maintitle %} {{ title }} {% endblock %}
+
+{% block header %} {% endblock %}
+
+{% block main %}
+
+{% if error_message %}
+    <p><strong>{{ error_message }}</strong></p>
+{% endif %}
+
 <p>Nombre de sondages : {{ nbr_sondages }}</p>
 <p>Nombre de choix : {{ nbr_choix }}</p>
 <p>Nombre de votes : {{ nbr_votes }}</p>
@@ -6,7 +19,5 @@
 <p>Question la plus populaire : {{ question_la_plus_populaire }}</p>
 <p>Question la moins populaire : {{ question_la_moins_populaire }}</p>
 <p>Dernière question : {{ derniere_question }}</p>
-<p><a href="{% url 'polls:index' %}">index</a></p>
 
-<br>
-<a href="{% url 'polls:index' %}">← Retour à l'accueil</a>
+{% endblock %}
