@@ -1,4 +1,13 @@
-<h1>{{ question.question_text }}</h1>
+{% extends "base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block maintitle %} {{ title }} {% endblock %}
+
+{% block main %}
+
+
+
 <ul>
 {% for choice in question.choice_set.all %}
     <li>{{ choice.choice_text }}: {{ choice.votes }} vote{{ choice.votes|pluralize }}</li>
@@ -7,3 +16,5 @@
 
 <p><a href="{% url 'polls:detail' question.id %}">Vote again?</a></p>
 <p><a href="{% url 'polls:index' %}">Retour à l'index des sondages</a></p>
+
+{% endblock %}
