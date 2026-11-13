@@ -4,13 +4,12 @@
 
 {% block maintitle %} {{ title }} {% endblock %}
 
-{% block header %} {% endblock %}
-
 {% block main %}
 
 {% if error_message %}
     <p><strong>{{ error_message }}</strong></p>
 {% endif %}
+
 <form action="{% url 'polls:vote' question.id %}" method="post">
 {% csrf_token %}
 <fieldset>
