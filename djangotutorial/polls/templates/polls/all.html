@@ -1,3 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block maintitle %} {{ title }} {% endblock %}
+
+{% block header %} {% endblock %}
+
+{% block main %}
+
+{% if error_message %}
+    <p><strong>{{ error_message }}</strong></p>
+{% endif %}
+
 {% if latest_question_list %}
     <ul>
     {% for question in latest_question_list %}
@@ -8,4 +22,4 @@
     <p>No polls are available.</p>
 {% endif %}
 
-<a href="{% url 'polls:index' %}">Retour à l'index </a>
+{% endblock %}
