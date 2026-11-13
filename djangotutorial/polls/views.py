@@ -14,10 +14,7 @@ from .utils import minimax
 from .forms import NameForm, QuestionAddForm, VoteForm
 from .models import Choice, Question, CustomUser
 
-
-
 NB_MAX_CHOIX = 5
-
 
 class IndexView(generic.ListView):
     template_name = "polls/index.html"
@@ -85,6 +82,11 @@ class ResultsView(generic.DetailView):
 class AllView(IndexView):
     template_name = "polls/all.html"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = "All polls"
+        return context
+
     def get_queryset(self):
         """Return all published questions."""
         return Question.objects.order_by("-pub_date")
@@ -98,6 +100,7 @@ class FrequencyView(generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["frequencies"] = self.object.get_choices()
+
         return context
 
 
@@ -120,6 +123,7 @@ def statistics(request):
         'question_la_plus_populaire': question_la_plus_populaire,
         'question_la_moins_populaire': question_la_moins_populaire,
         'derniere_question': derniere_question,
+        'title': "Statistics",
     })
 
 
@@ -168,14 +172,20 @@ def get_name(request):
         return HttpResponseRedirect("/polls/thanks/")
 
     # Dans tous les autres cas (GET initial ou POST invalide), on affiche le formulaire
-    return render(request, "polls/name.html", {"form": form})
+    return render(request, "polls/name.html", {
+        "form": form,
+        "title": "Get Name",
+    })
 
 
 def thanks_view(request):
     # On récupère le nom depuis la session (avec une valeur par défaut si vide)
     name = request.session.get("submitted_name", "invité")
 
-    return render(request, "polls/thanks.html", {"name": name})
+    return render(request, "polls/thanks.html", {
+        "name": name,
+        'title': "Thanks",
+    })
 
 
 class AuthenticateView(LoginView):
