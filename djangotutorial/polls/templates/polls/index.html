@@ -19,9 +19,3 @@
 {% endif %}
 
 {% endblock %}
-
-{% block footer %}
-<p><a href="{% url 'polls:add' %}">Add a question</a></p>
-<p><a href="{% url 'polls:statistics' %}">Statistiques des sondages</a></p>
-<a href="{% url 'polls:all' %}">Liste détaillée des questions </a>
-{% endblock %}
