@@ -1,3 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title}}{% endblock %}
+
+{% block maintitle %} {{ title }} {% endblock %}
+
+{% block header %} {% endblock %}
+
+{% block main %}
+
+{% if error_message %}
+    <p><strong>{{ error_message }}</strong></p>
+{% endif %}
+
 <form action="/polls/contact/" method="post">
     <!-- Jeton de sécurité obligatoire pour les requêtes POST en Django -->
     {% csrf_token %}
@@ -7,3 +21,4 @@
 
     <input type="submit" value="Envoyer">
 </form>
+{% endblock %}
