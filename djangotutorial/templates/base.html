@@ -4,8 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% load static %}
+    <link rel="stylesheet" href="{% static 'admin/css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'admin/css/login.css' %}">
     <link rel="stylesheet" href="{% static 'style.css' %}">
+    <script src="{% static 'scripts.js' %}"></script>
 
+    <!-- partie titre de l'onglet du navigateur -->
     <title>
         {% block title %}
         <!--
@@ -15,29 +19,94 @@
         -->
         {% endblock %}
     </title>
+    <!-- partie titre de l'onglet du navigateur -->
 </head>
 <body>
-    <!-- Le titre dans la page -->
-    <h1>{% block maintitle %}
-        <!--
-            Ce commentaire de titre dans la page sera remplacé si le modèle enfant
-            l'implémente. Sinon ce commentaire restera tel quel
-            dans le gabarit enfant.
-        -->
-        {% endblock %}
-    </h1>
-    <!-- La partie block Header -->
-    <header>
+
+<!-- La partie block Header -->
+    <header class="site-header">
         {% block header %}
         <!--
             Ce commentaire de header sera remplacé si le modèle enfant
             l'implémente. Sinon ce commentaire restera tel quel
             dans le gabarit enfant.
         -->
+                <!-- Lien vers la page d'accueil contenant l'image -->
+                <a href="{% url 'polls:index' %}" class="home-banner-link">
+                    <picture>
+                        <!-- 1. Si l'écran fait 768px ou moins (Téléphone) : charge le SVG compact -->
+                        <source media="(max-width: 768px)" srcset="{% static 'images/banniere-mobile.svg' %}">
+
+                        <!-- 2. Par défaut (Ordinateur / Tablette) : charge votre grand SVG Inkscape -->
+                        <img src="{% static 'images/Cyberpunk-Biomechanical-Cyborg-Mechanic-tattoo-design-for-women.svg' %}"
+                             alt="Logo Django CDA Python/JAVA Académie FMS 2026"
+                             class="header-banner-image">
+                    </picture>
+                </a>
+
+            <div class="header-container">
+            <span class="site-title-placeholder">Django CDA Python/JAVA Académie FMS 2026</span> <!-- Optionnel ou nom du site -->
+
+                <!-- Bouton Menu Burger (visible uniquement sur mobile) -->
+                <button class="menu-toggle" aria-label="Ouvrir le menu">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </button>
+
+                <!-- Navigation -->
+                <nav class="header-nav">
+                    <ul>
+                        <li><a href="{% url 'polls:index' %}">Home</a></li>
+                        <li><a href="{% url 'polls:statistics' %}">Statistics</a></li>
+                        <li><a href="{% url 'polls:contact' %}">Contact</a></li>
+                        <!-- Vérification si l'utilisateur est connecté -->
+                        {% if request.user.is_authenticated %}
+                            <li class="user-dropdown-container">
+                                <details class="admin-dropdown">
+                                    <summary class="user-menu-toggle">
+                                        👤 {{ request.user.first_name|default:request.user.email }} ▾
+                                    </summary>
+
+                                    <div class="dropdown-menu-native">
+                                        <a href="{% url 'polls:account' request.user.pk %}">Mon compte</a>
+
+                                        <form action="{% url 'polls:logout' %}" method="post" style="margin: 0;">
+                                            {% csrf_token %}
+                                            <button type="submit" class="dropdown-logout-btn">Se déconnecter</button>
+                                        </form>
+                                    </div>
+                                </details>
+                            </li>
+                        {% else %}
+                            <!-- Si l'utilisateur n'est pas connecté -->
+                            <p>
+                                <li><a href="{% url 'polls:login' %}">Log In</a></li>
+                            </p>
+                            <p>
+                                <li><a href="{% url 'polls:register' %}">Register</a></li>
+                            </p>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
         {% endblock %}
-    </header>
-    <!-- La partie block Main -->
+        </header>
+    <!-- Fin partie block Header -->
+
     <main>
+        <!-- Le titre dans la page -->
+        <h1>{% block maintitle %}
+            <!--
+                Ce commentaire de titre dans la page sera remplacé si le modèle enfant
+                l'implémente. Sinon ce commentaire restera tel quel
+                dans le gabarit enfant.
+            -->
+            {% endblock %}
+        </h1>
+        <!-- Fin titre dans la page -->
+
+        <!-- La partie block Main -->
         {% block main %}
         <!--
             Ce commentaire de main sera remplacé si le modèle enfant
@@ -45,7 +114,10 @@
             dans le gabarit enfant.
         -->
         {% endblock %}
+        <!-- Fin partie block Main -->
     </main>
+
+
     <!-- La partie block Footer -->
    <footer>
        {% block footer %}
@@ -63,5 +135,6 @@
        </p>
        {% endblock %}
        </footer>
+     <!-- Fin partie block Footer -->
 </body>
 </html>
