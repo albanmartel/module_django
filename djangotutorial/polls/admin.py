@@ -1,5 +1,6 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from .models import Question, Choice, CustomUser
 
 class ChoiceInline(admin.StackedInline):
@@ -27,23 +28,43 @@ class QuestionAdmin(admin.ModelAdmin):
     ]
     inlines = [ChoiceInline]
 
+# Formulaire personnalisé pour la création d'un utilisateur dans l'admin (avec gestion du hash du mot de passe)
+class CustomUserCreationForm(UserCreationForm):
+    class Meta:
+        model = CustomUser
+        fields = ('email', 'first_name', 'last_name')
 
-# Enregistrement indispensable de votre CustomUser pour le voir dans l'admin
+# Formulaire personnalisé pour la modification d'un utilisateur dans l'admin
+class CustomUserChangeForm(UserChangeForm):
+    class Meta:
+        model = CustomUser
+        fields = ('email', 'first_name', 'last_name', 'is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')
+
+# Configuration de l'interface d'administration
 @admin.register(CustomUser)
-class CustomUserAdmin(UserAdmin):
-    list_display = ('email', 'is_staff', 'is_superuser')
-    search_fields = ('email',)
+class CustomUserAdmin(admin.ModelAdmin):
+    form = CustomUserChangeForm
+    add_form = CustomUserCreationForm
+
+    list_display = ('email', 'first_name', 'last_name', 'is_staff', 'is_superuser')
+    search_fields = ('email', 'first_name', 'last_name')
     ordering = ('email',)
 
     filter_horizontal = ('groups', 'user_permissions',)
+
+    # Organisation des champs dans la page de modification d'un utilisateur
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
-        ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
+        ('Informations personnelles', {'fields': ('first_name', 'last_name')}),
+        ('Permissions et rôles', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
+        ('Dates importantes', {'fields': ('last_login',)})
     )
+
+    # Organisation des champs dans la page de création d'un utilisateur
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('email', 'password1', 'password2', 'is_staff', 'is_superuser')}
+            'fields': ('email', 'first_name', 'last_name', 'password1', 'password2', 'is_staff', 'is_superuser')}
          ),
     )
 
