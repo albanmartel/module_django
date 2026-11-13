@@ -4,8 +4,6 @@
 
 {% block maintitle %} {{ title }} {% endblock %}
 
-{% block header %} {% endblock %}
-
 {% block main %}
 
 {% if error_message %}
@@ -28,10 +26,4 @@
     <p>Vous ne souhaitez pas vous connecter ? <a href="{% url 'polls:index' %}">Continuer en simple visiteur</a></p>
 </body>
 
-{% endblock %}
-
-{% block footer %}
-<p><a href="{% url 'polls:add' %}">Add a question</a></p>
-<p><a href="{% url 'polls:statistics' %}">Statistiques des sondages</a></p>
-<a href="{% url 'polls:all' %}">Liste détaillée des questions </a>
 {% endblock %}
