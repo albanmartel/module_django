@@ -101,6 +101,8 @@ class CustomUserManager(BaseUserManager):
 # Le modèle utilisateur basé sur AbstractBaseUser (et non AbstractUser)
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
+    first_name = models.CharField(max_length=150, blank=True)  # Prénom
+    last_name = models.CharField(max_length=150, blank=True)  # Nom
 
     # Champs obligatoires pour que l'admin Django et la sécurité fonctionnent
     is_active = models.BooleanField(default=True)
@@ -113,4 +115,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     objects = CustomUserManager()
 
     def __str__(self):
+        # Affiche le nom complet s'il existe, sinon l'email
+        if self.first_name or self.last_name:
+            return f"{self.first_name} {self.last_name} ({self.email})"
         return self.email
