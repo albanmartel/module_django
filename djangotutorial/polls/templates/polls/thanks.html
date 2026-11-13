@@ -1,2 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block maintitle %} {{ title }} {% endblock %}
+
+{% block header %} {% endblock %}
+
+{% block main %}
+
+{% if error_message %}
+    <p><strong>{{ error_message }}</strong></p>
+{% endif %}
+
 <h1>Merci {{ name }} !</h1>
 <p>Votre formulaire a bien été pris en compte.</p>
+{% endblock %}
