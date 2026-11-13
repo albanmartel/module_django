@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %} Account {% endblock %}
+
+{% block maintitle %} Account {% endblock %}
+
+{% block main %}
+
+{% if error_message %}
+    <p><strong>{{ error_message }}</strong></p>
+{% endif %}
+
+{% block content %}
+<div class="account-container" style="padding: 20px;">
+    <h2>Profil de l'utilisateur</h2>
+
+    <p><strong>Identifiant / E-mail :</strong> {{ customuser.email }}</p>
+    <p><strong>Nom :</strong> {{ customuser.last_name|default:"Non renseigné" }}</p>
+    <p><strong>Prénom :</strong> {{ customuser.first_name|default:"Non renseigné" }}</p>
+    <p><strong>E-mail :</strong> {{ customuser.email }}</p>
+</div>
+{% endblock %}
+
+<div class="password-change-container" style="max-width: 400px; margin: 20px auto;">
+    <p>
+        <a href="{% url 'polls:change_password' %}">
+            Modifier mon mot de passe
+        </a>
+    </p>
+</div>
+
+{% endblock %}
