@@ -1,11 +1,13 @@
 /* =========== Modèle CSS produit par Gémini AI ==============*/
+/* =========== Modèle CSS combiné (Django + Header Burger + Pleine largeur) ==============*/
 
-/* =================================================u00e9l ==========================
+/* ==========================================================================
    1. Variables & Reset CSS
    ========================================================================== */
 :root {
     --primary-color: #4f46e5;
     --primary-hover: #4338ca;
+    --primary-hover-fg: #417690;
     --secondary-color: #06b6d4;
     --bg-color: #f3f4f6;
     --card-bg: #ffffff;
@@ -34,40 +36,165 @@ body {
     min-height: 100vh;
 }
 
+h1 {
+    margin-bottom: 1.5rem; /* Ajustez la valeur selon l'espace souhaité (ex: 1rem, 20px, etc.) */
+}
+
+/* Supprimer la flèche par défaut du summary selon les navigateurs */
+details.admin-dropdown > summary {
+    list-style: none;
+    cursor: pointer;
+}
+details.admin-dropdown > summary::-webkit-details-marker {
+    display: none;
+}
+
+/* Le conteneur du menu */
+details.admin-dropdown {
+    position: relative;
+}
+
+.dropdown-menu-native {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    border-radius: 4px;
+    min-width: 160px;
+    display: flex;
+    flex-direction: column;
+    z-index: 1000;
+    padding: 5px 0;
+}
+
+.dropdown-logout-btn {
+    /* Supprime l'apparence d'un bouton natif */
+    background: none;
+    border: none;
+    padding: 8px 16px; /* Ajustez selon l'espacement de votre menu */
+    margin: 0;
+    width: 100%;
+    text-align: left;
+
+    /* Transforme le texte pour qu'il ressemble à un lien */
+    color: #333; /* Couleur de texte classique, ou #0066cc pour un bleu lien */
+    font-size: 0.95rem;
+    font-family: inherit;
+    cursor: pointer;
+    text-decoration: none;
+    display: block;
+}
+
+/* Effet au survol : devient souligné comme un vrai lien */
+.dropdown-logout-btn:hover {
+    background-color: #f5f5f5; /* Optionnel : fond léger au survol dans le menu */
+    color: #004080;
+    text-decoration: underline;
+}
+
 /* ==========================================================================
-   2. Layout & Navigation
+   2. Layout & Navigation (Header & Burger)
    ========================================================================== */
 header {
     background-color: var(--card-bg);
     border-bottom: 1px solid var(--border-color);
-    padding: 1rem 2rem;
+    width: 100%;
+    position: relative;
+    padding: 0;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column; /* Empile l'image puis la barre de nav en dessous */
+}
+
+/* Le conteneur du lien qui forme le bandeau pleine largeur */
+.home-banner-link {
+    display: block;
+    width: 100%;
+    background-color: #ff9139ff; /* Couleur de fond du bandeau */
+    overflow: hidden;
+}
+
+/* L'image SVG s'adapte dynamiquement à la largeur et garde des proportions propres */
+.header-banner-image {
+    width: 100%;              /* Prend toute la largeur de l'écran */
+    height: auto;             /* Ajuste la hauteur automatiquement pour ne pas déformer le SVG */
+    max-height: 100px;        /* Sur grand écran, l'image ne dépassera jamais 200px de haut */
+    min-height: 80px;         /* Sur tout petit écran, l'image gardera au moins 80px de haut */
+    object-fit: contain;      /* Garantit que tout le dessin reste visible dans sa boîte */
+    display: block;
+    margin: 0 auto;           /* Centre l'image si elle atteint sa hauteur max */
+}
+
+/* Adaptation automatique sur téléphone */
+@media (max-width: 768px) {
+    .home-banner-link {
+        height: 100px;         /* Bandeau plus fin sur mobile */
+    }
+}
+
+/* La barre de navigation située en dessous de l'image */
+.header-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    display: flex;
+    justify-content: flex-end; /* Aligne les liens à droite (ou space-between si vous mettez un titre à gauche) */
     align-items: center;
+    box-sizing: border-box;
+    background-color: var(--card-bg);
+    border-top: 1px solid var(--border-color); /* Séparation visuelle nette sous l'image */
 }
 
-.logo {
-    font-weight: 700;
-    font-size: 1.25rem;
-    color: var(--primary-color);
-    text-decoration: none;
+.site-title-placeholder {
+    margin-right: auto; /* Pousse la navigation à droite si vous n'avez pas de texte/logo ici */
+    font-weight: 600;
+    color: var(--text-muted);
+    font-size: 0.9rem;
 }
 
-nav ul {
+/* Navigation sur grand écran */
+.header-nav ul, nav ul {
     display: flex;
     list-style: none;
     gap: 1.5rem;
+    margin: 0;
+    padding: 0;
+    align-items: center;
 }
 
-nav a {
+.header-nav a, nav a {
     text-decoration: none;
     color: var(--text-muted);
     font-weight: 500;
     transition: var(--transition);
 }
 
-nav a:hover {
+.header-nav a:hover, nav a:hover {
     color: var(--primary-color);
+}
+
+/* --- Bouton Burger (Caché sur ordinateur) --- */
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 24px;
+    width: 30px;
+    padding: 0;
+}
+
+.menu-toggle .bar {
+    display: block;
+    height: 3px;
+    width: 100%;
+    background-color: var(--text-main);
+    border-radius: 2px;
+    transition: all 0.3s ease;
 }
 
 main {
@@ -76,6 +203,7 @@ main {
     width: 100%;
     margin: 2rem auto;
     padding: 0 1rem;
+    box-sizing: border-box; /* Indispensable pour que le padding ne s'ajoute pas à la largeur de 100% */
 }
 
 /* ==========================================================================
@@ -138,6 +266,99 @@ main {
     box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
 }
 
+/* Conteneur principal de la page de connexion */
+#content-main {
+    max-width: 400px;
+    margin: 40px auto;
+    padding: 20px;
+    background: var(--body-bg, #fff);
+    border: 1px solid var(--hairline-color, #ccc);
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* Style des lignes du formulaire (reproduit l'admin) */
+#login-form .form-row {
+    padding: 10px 0;
+    overflow: hidden;
+    border-bottom: 1px solid var(--hairline-color, #eee);
+}
+
+#login-form .form-row label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: var(--body-fg, #333);
+}
+
+#login-form .form-row input[type="text"],
+#login-form .form-row input[type="password"] {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+    border: 1px solid var(--border-color, #ccc);
+    border-radius: 4px;
+}
+
+/* Zone du bouton de soumission */
+#login-form .submit-row {
+    padding: 15px 0 0 0;
+    text-align: right;
+    border: none;
+}
+
+#login-form .submit-row input[type="submit"] {
+    background: var(--primary-fg, #79aec8);
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#login-form .submit-row input[type='submit']:hover {
+    background: var(--primary-hover-fg);
+}
+
+.login .form-row #id_username, .login .form-row #id_password {
+    padding: 8px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.login #header {
+    height: auto;
+    padding: 15px 16px;
+    justify-content: center;
+}
+
+.login #header h1 {
+    font-size: 1.125rem;
+    margin: 0;
+}
+
+.login #header h1 a {
+    color: var(--header-link-color);
+}
+
+.login #content {
+    padding: 20px;
+}
+
+.login #container {
+    background: var(--body-bg);
+    border: 1px solid var(--hairline-color);
+    border-radius: 4px;
+    overflow: hidden;
+    width: 28em;
+    min-width: 300px;
+    margin: 100px auto;
+    height: auto;
+}
+
+
+
 /* ==========================================================================
    4. Messages d'alerte Django (messages framework)
    ========================================================================== */
@@ -167,4 +388,66 @@ footer {
     border-top: 1px solid var(--border-color);
     color: var(--text-muted);
     font-size: 0.875rem;
+}
+
+/* ==========================================================================
+   VERSION MOBILE (écrans de 768px ou moins)
+   ========================================================================== */
+@media (max-width: 768px) {
+    .menu-toggle {
+        display: flex; /* Affiche le bouton burger sur mobile */
+    }
+
+    .site-title-placeholder {
+        display: none; /* Cache le texte placeholder sur mobile pour laisser de la place au burger */
+    }
+
+    /* Le menu mobile se déroule sous la barre de navigation secondaire */
+    .header-nav, nav {
+        position: absolute;
+        top: 100%; /* Se positionne juste en bas du conteneur de la barre de nav */
+        left: 0;
+        width: 100%;
+        background-color: var(--card-bg);
+        border-bottom: 1px solid var(--border-color);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease-out;
+        z-index: 100;
+    }
+
+    .header-nav ul, nav ul {
+        flex-direction: column;
+        align-items: center;
+        padding: 10px 0;
+        gap: 0;
+    }
+
+    .header-nav li, nav li {
+        width: 100%;
+        text-align: center;
+        border-bottom: 1px solid var(--bg-color);
+    }
+
+    .header-nav a, nav a {
+        display: block;
+        padding: 15px 0;
+    }
+
+    /* Classe activée en JavaScript pour ouvrir le menu */
+    .header-nav.active, nav.active {
+        max-height: 300px;
+    }
+
+    /* Animation du bouton burger en croix */
+    .menu-toggle.active .bar:nth-child(1) {
+        transform: translateY(10px) rotate(45deg);
+    }
+    .menu-toggle.active .bar:nth-child(2) {
+        opacity: 0;
+    }
+    .menu-toggle.active .bar:nth-child(3) {
+        transform: translateY(-10px) rotate(-45deg);
+    }
 }
