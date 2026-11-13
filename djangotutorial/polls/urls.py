@@ -1,5 +1,6 @@
 from debug_toolbar.toolbar import debug_toolbar_urls
 from django.urls import path, include
+from django.contrib.auth.views import LoginView, LogoutView
 
 from . import views
 
@@ -22,10 +23,21 @@ urlpatterns = [
     # ex /polls/add
     path('add/', views.add, name='add'),
     # ex /polls/contacts
-    path('contact/', views.get_name, name='get_name'),
+    path('contact/', views.get_name, name='contact'),
     # ex /polls/thanks
     path("thanks/", views.thanks_view, name="thanks"),
     # ex /polls/authenticate
     path("authenticate/", views.AuthenticateView.as_view(), name="authenticate"),
-
+    # ex /polls/login
+    path("login/", LoginView.as_view(template_name = "polls/login.html", next_page = "polls:index"), name = "login"),
+    # ex /polls/logout
+    path("logout/", LogoutView.as_view(next_page="polls:index"), name="logout"),
+    # ex /polls/register
+    path("register/", views.register, name="register"),
+    # ex /polls/account/1
+    path("account/<int:pk>/", views.UserView.as_view(), name="account"),
+    # ex /polls/change_question/1
+    path("change_question/<int:pk>/", views.change_question, name="change_question"),
+    # ex /polls/password
+    path("password/", views.ChangePasswordView.as_view(), name="change_password"),
 ]
