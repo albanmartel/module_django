@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block main %}
+<div style="display: flex; justify-content: center; align-items: center; height: 70vh;">
+    <div class="welcome-card" style="background: white; padding: 40px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); text-align: center; width: 350px;">
+        <h1 style="color: #333; margin-bottom: 20px; font-size: 1.5rem;">Welcome</h1>
+        <p style="color: #666; margin-bottom: 25px;">Please select a section :</p>
+
+        <!-- Lien vers l'application polls -->
+        <a href="{% url 'polls:index' %}" class="btn" style="display: block; width: 100%; padding: 12px; margin: 10px 0; text-decoration: none; color: white; background-color: #007bff; border-radius: 4px; font-weight: bold; box-sizing: border-box;">
+            Accéder aux Sondages (Polls)
+        </a>
+
+        <!-- Lien vers l'administration Django -->
+        <a href="{% url 'admin:index' %}" class="btn" style="display: block; width: 100%; padding: 12px; margin: 10px 0; text-decoration: none; color: white; background-color: #343a40; border-radius: 4px; font-weight: bold; box-sizing: border-box;">
+            Panneau d'Administration
+        </a>
+    </div>
+</div>
+{% endblock %}
