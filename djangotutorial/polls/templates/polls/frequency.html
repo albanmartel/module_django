@@ -1,4 +1,14 @@
-<h1>{{ question.question_text }}</h1>
+{% extends "base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block maintitle %} {{ title }} {% endblock %}
+
+{% block main %}
+
+{% if error_message %}
+    <p><strong>{{ error_message }}</strong></p>
+{% endif %}
 
 <ul>
     {% for choice in question.get_choices %}
@@ -8,3 +18,5 @@
 
 <p><a href="{% url 'polls:detail' question.id %}">Voter à nouveau ?</a></p>
 <p><a href="{% url 'polls:index' %}">Retour à l'index des sondages</a></p>
+
+{% endblock %}
